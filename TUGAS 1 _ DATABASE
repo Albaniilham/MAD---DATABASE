@@ -1,0 +1,46 @@
+MariaDB [dbpos]> CREATE TABLE produk (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     kode VARCHAR(10) UNIQUE,
+    ->     nama VARCHAR(100) NOT NULL,
+    ->     harga DOUBLE NOT NULL,
+    ->     stok INT DEFAULT 0,
+    ->     jenis_produk_id INT NOT NULL,
+    ->     deskripsi TEXT,
+    ->     FOREIGN KEY (jenis_produk_id) REFERENCES jenis_produk(id)
+    -> );
+Query OK, 0 rows affected (0.118 sec)
+
+MariaDB [dbpos]> CREATE TABLE pesanan_items (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     pesanan_id INT NOT NULL,
+    ->     produk_id INT NOT NULL,
+    ->     qty INT NOT NULL DEFAULT 1,
+    ->     harga DOUBLE NOT NULL,
+    ->     subtotal DOUBLE GENERATED ALWAYS AS (qty * harga) STORED,
+    ->     FOREIGN KEY (pesanan_id) REFERENCES pesanan(id),
+    ->     FOREIGN KEY (produk_id) REFERENCES produk(id)
+    -> );
+Query OK, 0 rows affected (0.091 sec)
+
+MariaDB [dbpos]> CREATE TABLE vendor (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     kode VARCHAR(10) UNIQUE,
+    ->     nama VARCHAR(100) NOT NULL,
+    ->     alamat TEXT,
+    ->     telepon VARCHAR(20),
+    ->     email VARCHAR(100),
+    ->     kontak_person VARCHAR(100),
+    ->     keterangan TEXT
+    -> );
+Query OK, 0 rows affected (0.073 sec)
+
+MariaDB [dbpos]> CREATE TABLE pembelian (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     kode VARCHAR(20) UNIQUE,
+    ->     tgl_pembelian DATE NOT NULL,
+    ->     vendor_id INT NOT NULL,
+    ->     total DOUBLE DEFAULT 0,
+    ->     keterangan TEXT,
+    ->     FOREIGN KEY (vendor_id) REFERENCES vendor(id)
+    -> );
+Query OK, 0 rows affected (0.096 sec)
